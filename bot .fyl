@@ -1,0 +1,59 @@
+import os
+from telegram import Update
+from telegram.ext import Application, CommandHandler, ContextTypes
+
+TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text(
+        "🤖 FlexSignalsBOT est en ligne.\n\n"
+        "Institutional Entry A+ — moteur en préparation.\n"
+        "Utilise /help pour voir les commandes."
+    )
+
+async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text(
+        "📊 FlexSignalsBOT\n\n"
+        "/start — Démarrer le bot\n"
+        "/help — Afficher l'aide\n"
+        "/signal — Dernier signal A+\n"
+        "/status — Statut du moteur\n"
+        "/xauusd — Analyse XAUUSD"
+    )
+
+async def status(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text(
+        "🟢 Bot Telegram : opérationnel\n"
+        "🟡 Moteur A+ : en construction\n"
+        "🟡 Données XAUUSD : à connecter\n"
+        "🟡 Analyse H1 → M15 → M5 → M1 : à connecter"
+    )
+
+async def signal(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text(
+        "⏳ Aucun signal A+ confirmé pour le moment."
+    )
+
+async def xauusd(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text(
+        "🥇 XAUUSD\n\n"
+        "Analyse automatique bientôt disponible."
+    )
+
+def main():
+    if not TOKEN:
+        raise RuntimeError("TELEGRAM_BOT_TOKEN manquant")
+
+    app = Application.builder().token(TOKEN).build()
+
+    app.add_handler(CommandHandler("start", start))
+    app.add_handler(CommandHandler("help", help_command))
+    app.add_handler(CommandHandler("status", status))
+    app.add_handler(CommandHandler("signal", signal))
+    app.add_handler(CommandHandler("xauusd", xauusd))
+
+    print("FlexSignalsBOT démarré.")
+    app.run_polling()
+
+if __name__ == "__main__":
+    main()
